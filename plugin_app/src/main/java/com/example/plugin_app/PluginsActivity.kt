@@ -1,7 +1,10 @@
 package com.example.plugin_app
 
+import android.app.Activity
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,20 +16,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.LifecycleOwner
 import top.guuguo.plugin_base.IPluginActivityInterface
 import com.example.plugin_app.ui.theme.MyApplicationTheme
+import top.guuguo.plugin_base.utils.ext.logI
 
 class PluginsActivity : IPluginActivityInterface() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MyApplicationTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    MainContent()
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        (owner as? ComponentActivity)?.apply {
+            setContent {
+                MyApplicationTheme {
+                    // A surface container using the 'background' color from the theme
+                    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                        MainContent()
+                    }
                 }
             }
         }
+        "currentState==>${owner.lifecycle.currentState}".logI()
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        "currentState==>${owner.lifecycle.currentState}".logI()
     }
 }
 
@@ -34,7 +48,9 @@ class PluginsActivity : IPluginActivityInterface() {
 fun MainContent() {
     val context = LocalContext.current
     Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "我是插件app")
+        Text(text = "我是插件app", modifier = Modifier.clickable {
+            throw RuntimeException("点击测试crash")
+        })
     }
 
 }

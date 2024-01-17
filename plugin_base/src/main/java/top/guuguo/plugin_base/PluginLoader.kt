@@ -8,9 +8,9 @@ import java.io.File
 
 object PluginLoader {
     fun loadPlugin() {
-        val inputStream = Utils.getApp().assets.open("plugin.apk")
+        val inputStream = Utils.getApp().assets.open("plugin_new.apk")
         val filesDir = Utils.getApp().externalCacheDir
-        val apkFile = File(filesDir?.absolutePath, "plugin.apk")
+        val apkFile = File(filesDir?.absolutePath, "plugin_new.apk")
         apkFile.writeBytes(inputStream.readBytes())
 
         val dexFile = File(filesDir, "dex")

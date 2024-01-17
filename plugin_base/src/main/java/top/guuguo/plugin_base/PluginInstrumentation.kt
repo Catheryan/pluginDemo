@@ -12,7 +12,6 @@ import java.lang.reflect.Method
 
 
 class PluginInstrumentation(var instrumentation:Instrumentation): Instrumentation() {
-
     @SuppressLint("DiscouragedPrivateApi")
     fun execStartActivity(
         who: Context?, contextThread: IBinder?, token: IBinder?, target: Activity?,
